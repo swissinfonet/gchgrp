@@ -40,7 +40,6 @@ set(HEADERS
     src/net/Url.h
     src/Options.h
     src/Platform.h
-    src/Summary.h
     src/version.h
     src/workers/DoubleWorker.h
     src/workers/Handle.h
@@ -90,7 +89,6 @@ set(SOURCES
     src/net/Url.cpp
     src/Options.cpp
     src/Platform.cpp
-    src/Summary.cpp
     src/workers/DoubleWorker.cpp
     src/workers/Handle.cpp
     src/workers/Hashrate.cpp

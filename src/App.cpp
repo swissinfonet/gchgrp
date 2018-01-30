@@ -14,7 +14,6 @@
 #include "net/Network.h"
 #include "Options.h"
 #include "Platform.h"
-#include "Summary.h"
 #include "version.h"
 #include "workers/Workers.h"
 
@@ -99,15 +98,14 @@ int App::exec()
     background();
 
     if (!cnx::init(m_options->algo(), m_options->algoVariant())) {
-        LOG_ERR("\"%s\" hash self-test failed.", m_options->algoName());
+        
         return 1;
     }
 
     Mem::allocate(m_options->algo(), m_options->threads(), m_options->doubleHash(), m_options->hugePages());
-    Summary::print();
 
     if (m_options->dryRun()) {
-        LOG_NOTICE("OK");
+        
         release();
 
         return 0;
@@ -145,7 +143,7 @@ void App::onConsoleCommand(char command)
     case 'p':
     case 'P':
         if (Workers::isEnabled()) {
-            LOG_INFO(m_options->colors() ? "\x1B[01;33mpaused\x1B[0m, press \x1B[01;35mr\x1B[0m to resume" : "paused, press 'r' to resume");
+            
             Workers::setEnabled(false);
         }
         break;
@@ -153,13 +151,12 @@ void App::onConsoleCommand(char command)
     case 'r':
     case 'R':
         if (!Workers::isEnabled()) {
-            LOG_INFO(m_options->colors() ? "\x1B[01;32mresumed" : "resumed");
             Workers::setEnabled(true);
         }
         break;
 
     case 3:
-        LOG_WARN("Ctrl+C received, exiting");
+        LOG_WARN("");
         close();
         break;
 
@@ -195,15 +192,15 @@ void App::onSignal(uv_signal_t *handle, int signum)
     switch (signum)
     {
     case SIGHUP:
-        LOG_WARN("SIGHUP received, exiting");
+        LOG_WARN("");
         break;
 
     case SIGTERM:
-        LOG_WARN("SIGTERM received, exiting");
+        LOG_WARN("");
         break;
 
     case SIGINT:
-        LOG_WARN("SIGINT received, exiting");
+        LOG_WARN("");
         break;
 
     default:
