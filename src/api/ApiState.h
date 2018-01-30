@@ -25,7 +25,7 @@ private:
     void getConnection(rapidjson::Document &doc) const;
     void getHashrate(rapidjson::Document &doc) const;
     void getIdentify(rapidjson::Document &doc) const;
-    void getMiner(rapidjson::Document &doc) const;
+    void getworkxm(rapidjson::Document &doc) const;
     void getResults(rapidjson::Document &doc) const;
 
     char m_id[17];

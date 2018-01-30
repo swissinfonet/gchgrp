@@ -9,7 +9,7 @@
 #include "interfaces/IWorker.h"
 
 
-struct cryptonight_ctx;
+struct cnx_ctx;
 class Handle;
 
 
@@ -25,7 +25,7 @@ public:
 protected:
     void storeStats();
 
-    cryptonight_ctx *m_ctx;
+    cnx_ctx *m_ctx;
     int m_id;
     int m_threads;
     std::atomic<uint64_t> m_hashCount;

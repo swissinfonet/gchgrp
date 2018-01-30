@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(gchgrp)
 
 option(WITH_LIBCPUID "Use Libcpuid" ON)
-option(WITH_AEON     "CryptoNight-Lite support" ON)
+option(WITH_AEON     "cnx-Lite support" ON)
 option(WITH_HTTPD    "HTTP REST API" ON)
 
 include (CheckIncludeFile)
@@ -56,8 +56,8 @@ set(HEADERS_CRYPTO
     src/crypto/c_jh.h
     src/crypto/c_keccak.h
     src/crypto/c_skein.h
-    src/crypto/CryptoNight.h
-    src/crypto/CryptoNight_test.h
+    src/crypto/cnx.h
+    src/crypto/cnx_test.h
     src/crypto/groestl_tables.h
     src/crypto/hash.h
     src/crypto/skein_port.h
@@ -65,9 +65,9 @@ set(HEADERS_CRYPTO
    )
 
 if (gchgrp_ARM)
-    set(HEADERS_CRYPTO "${HEADERS_CRYPTO}" src/crypto/CryptoNight_arm.h)
+    set(HEADERS_CRYPTO "${HEADERS_CRYPTO}" src/crypto/cnx_arm.h)
 else()
-    set(HEADERS_CRYPTO "${HEADERS_CRYPTO}" src/crypto/CryptoNight_x86.h)
+    set(HEADERS_CRYPTO "${HEADERS_CRYPTO}" src/crypto/cnx_x86.h)
 endif()
 
 set(SOURCES
@@ -106,7 +106,7 @@ set(SOURCES_CRYPTO
     src/crypto/c_blake256.c
     src/crypto/c_jh.c
     src/crypto/c_skein.c
-    src/crypto/CryptoNight.cpp
+    src/crypto/cnx.cpp
    )
 
 if (WIN32)

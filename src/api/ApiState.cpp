@@ -69,7 +69,7 @@ char *ApiState::get(const char *url, int *status) const
     doc.SetObject();
 
     getIdentify(doc);
-    getMiner(doc);
+    getworkxm(doc);
     getHashrate(doc);
     getResults(doc);
     getConnection(doc);
@@ -193,7 +193,7 @@ void ApiState::getIdentify(rapidjson::Document &doc) const
 }
 
 
-void ApiState::getMiner(rapidjson::Document &doc) const
+void ApiState::getworkxm(rapidjson::Document &doc) const
 {
     auto &allocator = doc.GetAllocator();
 

@@ -1,7 +1,7 @@
 #include <thread>
 
 
-#include "crypto/CryptoNight.h"
+#include "crypto/cnx.h"
 #include "workers/SingleWorker.h"
 #include "workers/Workers.h"
 
@@ -36,7 +36,7 @@ void SingleWorker::start()
             m_count++;
             *m_job.nonce() = ++m_result.nonce;
 
-            if (CryptoNight::hash(m_job, m_result, m_ctx)) {
+            if (cnx::hash(m_job, m_result, m_ctx)) {
                 Workers::submit(m_result);
             }
 

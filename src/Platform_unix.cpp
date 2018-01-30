@@ -10,7 +10,7 @@
 #include "version.h"
 
 #ifdef gchgrp_NVIDIA_PROJECT
-#   include "nvidia/cryptonight.h"
+#   include "nvidia/cnx.h"
 #endif
 
 

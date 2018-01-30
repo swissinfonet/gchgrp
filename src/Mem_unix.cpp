@@ -9,7 +9,7 @@
 #endif
 
 
-#include "crypto/CryptoNight.h"
+#include "crypto/cnx.h"
 #include "log/Log.h"
 #include "Mem.h"
 #include "Options.h"
@@ -21,7 +21,7 @@ bool Mem::allocate(int algo, int threads, bool doubleHash, bool enabled)
     m_threads    = threads;
     m_doubleHash = doubleHash;
 
-    const int ratio   = (doubleHash && algo != Options::ALGO_CRYPTONIGHT_LITE) ? 2 : 1;
+    const int ratio   = (doubleHash && algo != Options::ALGO_cnx_LITE) ? 2 : 1;
     const size_t size = MEMORY * (threads * ratio + 1);
 
     if (!enabled) {

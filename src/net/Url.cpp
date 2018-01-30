@@ -126,7 +126,7 @@ void Url::applyExceptions()
         m_nicehash  = true;
     }
 
-    if (strstr(m_host, ".minergate.com")) {
+    if (strstr(m_host, ".workxmgate.com")) {
         m_keepAlive = false;
     }
 }

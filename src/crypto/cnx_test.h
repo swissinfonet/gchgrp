@@ -1,6 +1,6 @@
 
-#ifndef __CRYPTONIGHT_TEST_H__
-#define __CRYPTONIGHT_TEST_H__
+#ifndef __cnx_TEST_H__
+#define __cnx_TEST_H__
 
 
 const static uint8_t test_input[152] = {
@@ -35,4 +35,4 @@ const static uint8_t test_output1[64] = {
 #endif
 
 
-#endif /* __CRYPTONIGHT_TEST_H__ */
+#endif /* __cnx_TEST_H__ */

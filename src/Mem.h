@@ -9,7 +9,7 @@
 #include "align.h"
 
 
-struct cryptonight_ctx;
+struct cnx_ctx;
 
 
 class Mem
@@ -22,7 +22,7 @@ public:
     };
 
     static bool allocate(int algo, int threads, bool doubleHash, bool enabled);
-    static cryptonight_ctx *create(int threadId);
+    static cnx_ctx *create(int threadId);
     static void *calloc(size_t num, size_t size);
     static void release();
 
@@ -41,7 +41,7 @@ private:
     VAR_ALIGN(16, static uint8_t *m_memory);
 
 #   ifndef gchgrp_NO_AEON
-    static cryptonight_ctx *createLite(int threadId);
+    static cnx_ctx *createLite(int threadId);
 #   endif
 };
 

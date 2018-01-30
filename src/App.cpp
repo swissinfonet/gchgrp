@@ -6,7 +6,7 @@
 #include "App.h"
 #include "Console.h"
 #include "Cpu.h"
-#include "crypto/CryptoNight.h"
+#include "crypto/cnx.h"
 #include "log/ConsoleLog.h"
 #include "log/FileLog.h"
 #include "log/Log.h"
@@ -98,7 +98,7 @@ int App::exec()
 
     background();
 
-    if (!CryptoNight::init(m_options->algo(), m_options->algoVariant())) {
+    if (!cnx::init(m_options->algo(), m_options->algoVariant())) {
         LOG_ERR("\"%s\" hash self-test failed.", m_options->algoName());
         return 1;
     }

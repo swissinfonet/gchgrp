@@ -17,8 +17,8 @@ class Options
 {
 public:
     enum Algo {
-        ALGO_CRYPTONIGHT,      /* CryptoNight (Monero) */
-        ALGO_CRYPTONIGHT_LITE, /* CryptoNight-Lite (AEON) */
+        ALGO_cnx,
+        ALGO_cnx_LITE,
     };
 
     enum AlgoVariant {
