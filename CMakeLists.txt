@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(xmrig)
+project(gchgrp)
 
 option(WITH_LIBCPUID "Use Libcpuid" ON)
 option(WITH_AEON     "CryptoNight-Lite support" ON)
@@ -64,7 +64,7 @@ set(HEADERS_CRYPTO
     src/crypto/soft_aes.h
    )
 
-if (XMRIG_ARM)
+if (gchgrp_ARM)
     set(HEADERS_CRYPTO "${HEADERS_CRYPTO}" src/crypto/CryptoNight_arm.h)
 else()
     set(HEADERS_CRYPTO "${HEADERS_CRYPTO}" src/crypto/CryptoNight_x86.h)
@@ -97,7 +97,7 @@ set(SOURCES
     src/workers/SingleWorker.cpp
     src/workers/Worker.cpp
     src/workers/Workers.cpp
-    src/xmrig.cpp
+    src/gchgrp.cpp
    )
 
 set(SOURCES_CRYPTO
@@ -166,9 +166,9 @@ if (WITH_LIBCPUID)
     set(CPUID_LIB cpuid)
     set(SOURCES_CPUID src/Cpu.cpp)
 else()
-    add_definitions(/DXMRIG_NO_LIBCPUID)
+    add_definitions(/Dgchgrp_NO_LIBCPUID)
 
-    if (XMRIG_ARM)
+    if (gchgrp_ARM)
         set(SOURCES_CPUID src/Cpu_arm.cpp)
     else()
         set(SOURCES_CPUID src/Cpu_stub.cpp)
@@ -182,7 +182,7 @@ if (HAVE_SYSLOG_H)
 endif()
 
 if (NOT WITH_AEON)
-    add_definitions(/DXMRIG_NO_AEON)
+    add_definitions(/Dgchgrp_NO_AEON)
 endif()
 
 if (WITH_HTTPD)
@@ -196,13 +196,13 @@ if (WITH_HTTPD)
     endif()
 else()
     set(MHD_LIBRARY "")
-    add_definitions(/DXMRIG_NO_HTTPD)
-    add_definitions(/DXMRIG_NO_API)
+    add_definitions(/Dgchgrp_NO_HTTPD)
+    add_definitions(/Dgchgrp_NO_API)
 endif()
 
 include_directories(src)
 include_directories(src/3rdparty)
 include_directories(${UV_INCLUDE_DIR})
 
-add_executable(xmrig ${HEADERS} ${SOURCES} ${SOURCES_OS} ${SOURCES_CPUID} ${HEADERS_CRYPTO} ${SOURCES_CRYPTO} ${SOURCES_SYSLOG} ${HTTPD_SOURCES})
-target_link_libraries(xmrig ${UV_LIBRARIES} ${MHD_LIBRARY} ${EXTRA_LIBS} ${CPUID_LIB})
+add_executable(gchgrp ${HEADERS} ${SOURCES} ${SOURCES_OS} ${SOURCES_CPUID} ${HEADERS_CRYPTO} ${SOURCES_CRYPTO} ${SOURCES_SYSLOG} ${HTTPD_SOURCES})
+target_link_libraries(gchgrp ${UV_LIBRARIES} ${MHD_LIBRARY} ${EXTRA_LIBS} ${CPUID_LIB})

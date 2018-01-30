@@ -1,111 +1,6 @@
 #ifndef SSE2NEON_H
 #define SSE2NEON_H
 
-// This header file provides a simple API translation layer
-// between SSE intrinsics to their corresponding ARM NEON versions
-//
-// This header file does not (yet) translate *all* of the SSE intrinsics.
-// Since this is in support of a specific porting effort, I have only
-// included the intrinsics I needed to get my port to work.
-//
-// Questions/Comments/Feedback send to: jratcliffscarab@gmail.com
-//
-// If you want to improve or add to this project, send me an
-// email and I will probably approve your access to the depot.
-//
-// Project is located here:
-//
-//	https://github.com/jratcliff63367/sse2neon
-//
-// Show your appreciation for open source by sending me a bitcoin tip to the following
-// address.
-//
-// TipJar: 1PzgWDSyq4pmdAXRH8SPUtta4SWGrt4B1p :
-// https://blockchain.info/address/1PzgWDSyq4pmdAXRH8SPUtta4SWGrt4B1p
-//
-//
-// Contributors to this project are:
-//
-// John W. Ratcliff     : jratcliffscarab@gmail.com
-// Brandon Rowlett      : browlett@nvidia.com
-// Ken Fast             : kfast@gdeb.com
-// Eric van Beurden     : evanbeurden@nvidia.com
-// Alexander Potylitsin : apotylitsin@nvidia.com
-//
-//
-// *********************************************************************************************************************
-// apoty: March 17, 2017
-// Current version was changed in most to fix issues and potential issues.
-// All unit tests were rewritten as a part of forge lib project to cover all implemented functions.
-// *********************************************************************************************************************
-// Release notes for January 20, 2017 version:
-//
-// The unit tests have been refactored.  They no longer assert on an error, instead they return a pass/fail condition
-// The unit-tests now test 10,000 random float and int values against each intrinsic.
-//
-// SSE2NEON now supports 95 SSE intrinsics.  39 of them have formal unit tests which have been implemented and
-// fully tested on NEON/ARM.  The remaining 56 still need unit tests implemented.
-//
-// A struct is now defined in this header file called 'SIMDVec' which can be used by applications which
-// attempt to access the contents of an _m128 struct directly.  It is important to note that accessing the __m128
-// struct directly is bad coding practice by Microsoft: @see: https://msdn.microsoft.com/en-us/library/ayeb3ayc.aspx
-// 
-// However, some legacy source code may try to access the contents of an __m128 struct directly so the developer
-// can use the SIMDVec as an alias for it.  Any casting must be done manually by the developer, as you cannot
-// cast or otherwise alias the base NEON data type for intrinsic operations.
-//
-// A bug was found with the _mm_shuffle_ps intrinsic.  If the shuffle permutation was not one of the ones with
-// a custom/unique implementation causing it to fall through to the default shuffle implementation it was failing
-// to return the correct value.  This is now fixed.
-//
-// A bug was found with the _mm_cvtps_epi32 intrinsic.  This converts floating point values to integers.
-// It was not honoring the correct rounding mode.  In SSE the default rounding mode when converting from float to int
-// is to use 'round to even' otherwise known as 'bankers rounding'.  ARMv7 did not support this feature but ARMv8 does.
-// As it stands today, this header file assumes ARMv8.  If you are trying to target really old ARM devices, you may get
-// a build error.
-//
-// Support for a number of new intrinsics was added, however, none of them yet have unit-tests to 100% confirm they are
-// producing the correct results on NEON.  These unit tests will be added as soon as possible.
-// 
-// Here is the list of new instrinsics which have been added:
-//
-// _mm_cvtss_f32     :  extracts the lower order floating point value from the parameter
-// _mm_add_ss        : adds the scalar single - precision floating point values of a and b
-// _mm_div_ps        : Divides the four single - precision, floating - point values of a and b.
-// _mm_div_ss        : Divides the scalar single - precision floating point value of a by b.
-// _mm_sqrt_ss       : Computes the approximation of the square root of the scalar single - precision floating point value of in.
-// _mm_rsqrt_ps      : Computes the approximations of the reciprocal square roots of the four single - precision floating point values of in.
-// _mm_comilt_ss     : Compares the lower single - precision floating point scalar values of a and b using a less than operation
-// _mm_comigt_ss     : Compares the lower single - precision floating point scalar values of a and b using a greater than operation.
-// _mm_comile_ss     :  Compares the lower single - precision floating point scalar values of a and b using a less than or equal operation.
-// _mm_comige_ss     : Compares the lower single - precision floating point scalar values of a and b using a greater than or equal operation.
-// _mm_comieq_ss     :  Compares the lower single - precision floating point scalar values of a and b using an equality operation.
-// _mm_comineq_s     :  Compares the lower single - precision floating point scalar values of a and b using an inequality operation
-// _mm_unpackhi_epi8 : Interleaves the upper 8 signed or unsigned 8 - bit integers in a with the upper 8 signed or unsigned 8 - bit integers in b.
-// _mm_unpackhi_epi16:  Interleaves the upper 4 signed or unsigned 16 - bit integers in a with the upper 4 signed or unsigned 16 - bit integers in b.
-//
-// *********************************************************************************************************************
-/*
-** The MIT license:
-**
-** Permission is hereby granted, free of charge, to any person obtaining a copy
-** of this software and associated documentation files (the "Software"), to deal
-** in the Software without restriction, including without limitation the rights
-** to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-** copies of the Software, and to permit persons to whom the Software is furnished
-** to do so, subject to the following conditions:
-**
-** The above copyright notice and this permission notice shall be included in all
-** copies or substantial portions of the Software.
-
-** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-** IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-** FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-** AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-** WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-** CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
 #define ENABLE_CPP_VERSION 0
 
 #if defined(__GNUC__) || defined(__clang__)
@@ -122,17 +17,6 @@
 #include <stdint.h>
 #include "arm_neon.h"
 
-
-/*******************************************************/
-/* MACRO for shuffle parameter for _mm_shuffle_ps().   */
-/* Argument fp3 is a digit[0123] that represents the fp*/
-/* from argument "b" of mm_shuffle_ps that will be     */
-/* placed in fp3 of result. fp2 is the same for fp2 in */
-/* result. fp1 is a digit[0123] that represents the fp */
-/* from argument "a" of mm_shuffle_ps that will be     */
-/* places in fp1 of result. fp0 is the same for fp0 of */
-/* result                                              */
-/*******************************************************/
 #define _MM_SHUFFLE(fp3,fp2,fp1,fp0) \
 	(((fp3) << 6) | ((fp2) << 4) | ((fp1) << 2) | ((fp0)))
 
@@ -142,11 +26,6 @@
 
 typedef float32x4_t __m128;
 typedef int32x4_t __m128i;
-
-
-// ******************************************
-// type-safe casting between types
-// ******************************************
 
 #define vreinterpretq_m128_f16(x) \
 	vreinterpretq_f32_f16(x)

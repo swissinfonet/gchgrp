@@ -1,27 +1,3 @@
-/* XMRig
- * Copyright 2010      Jeff Garzik <jgarzik@pobox.com>
- * Copyright 2012-2014 pooler      <pooler@litecoinpool.org>
- * Copyright 2014      Lucas Jones <https://github.com/lucasjones>
- * Copyright 2014-2016 Wolf9466    <https://github.com/OhGodAPet>
- * Copyright 2016      Jay D Dee   <jayddee246@gmail.com>
- * Copyright 2016-2017 XMRig       <support@xmrig.com>
- *
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
-
 #include <string.h>
 #include <uv.h>
 
@@ -33,7 +9,7 @@
 #endif
 
 
-#ifndef XMRIG_NO_HTTPD
+#ifndef gchgrp_NO_HTTPD
 #   include <microhttpd.h>
 #endif
 
@@ -86,7 +62,7 @@ Options:\n\
 "\
       --max-cpu-usage=N    maximum CPU usage for automatic threads mode (default 75)\n\
       --safe               safe adjust threads and av settings for current CPU\n\
-      --nicehash           enable nicehash/xmrig-proxy support\n\
+      --nicehash           enable nicehash/gchgrp-proxy support\n\
       --print-time=N       print hashrate report every N seconds\n\
       --api-port=N         port for the miner API\n\
       --api-access-token=T access token for API\n\
@@ -178,7 +154,7 @@ static struct option const api_options[] = {
 
 static const char *algo_names[] = {
     "cryptonight",
-#   ifndef XMRIG_NO_AEON
+#   ifndef gchgrp_NO_AEON
     "cryptonight-lite"
 #   endif
 };
@@ -679,7 +655,7 @@ void Options::showVersion()
 
     printf("\nlibuv/%s\n", uv_version_string());
 
-#   ifndef XMRIG_NO_HTTPD
+#   ifndef gchgrp_NO_HTTPD
     printf("libmicrohttpd/%s\n", MHD_get_version());
 #   endif
 }
@@ -693,7 +669,7 @@ bool Options::setAlgo(const char *algo)
             break;
         }
 
-#       ifndef XMRIG_NO_AEON
+#       ifndef gchgrp_NO_AEON
         if (i == ARRAY_SIZE(algo_names) - 1 && !strcmp(algo, "cryptonight-light")) {
             m_algo = ALGO_CRYPTONIGHT_LITE;
             break;
@@ -712,7 +688,7 @@ bool Options::setAlgo(const char *algo)
 
 int Options::getAlgoVariant() const
 {
-#   ifndef XMRIG_NO_AEON
+#   ifndef gchgrp_NO_AEON
     if (m_algo == ALGO_CRYPTONIGHT_LITE) {
         return getAlgoVariantLite();
     }
@@ -730,7 +706,7 @@ int Options::getAlgoVariant() const
 }
 
 
-#ifndef XMRIG_NO_AEON
+#ifndef gchgrp_NO_AEON
 int Options::getAlgoVariantLite() const
 {
     if (m_algoVariant <= AV0_AUTO || m_algoVariant >= AV_MAX) {

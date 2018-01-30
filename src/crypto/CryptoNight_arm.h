@@ -1,32 +1,8 @@
-/* XMRig
- * Copyright 2010      Jeff Garzik  <jgarzik@pobox.com>
- * Copyright 2012-2014 pooler       <pooler@litecoinpool.org>
- * Copyright 2014      Lucas Jones  <https://github.com/lucasjones>
- * Copyright 2014-2016 Wolf9466     <https://github.com/OhGodAPet>
- * Copyright 2016      Jay D Dee    <jayddee246@gmail.com>
- * Copyright 2016      Imran Yusuff <https://github.com/imranyusuff>
- * Copyright 2016-2017 XMRig        <support@xmrig.com>
- *
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #ifndef __CRYPTONIGHT_ARM_H__
 #define __CRYPTONIGHT_ARM_H__
 
 
-#if defined(XMRIG_ARM) && !defined(__clang__)
+#if defined(gchgrp_ARM) && !defined(__clang__)
 #   include "aligned_malloc.h"
 #else
 #   include <mm_malloc.h>
@@ -86,7 +62,7 @@ static inline __attribute__((always_inline)) uint64_t _mm_cvtsi128_si64(__m128i 
 #define EXTRACT64(X) _mm_cvtsi128_si64(X)
 
 
-#if defined(XMRIG_ARMv8)
+#if defined(gchgrp_ARMv8)
 static inline uint64_t __umul128(uint64_t a, uint64_t b, uint64_t* hi)
 {
     unsigned __int128 r = (unsigned __int128) a * (unsigned __int128) b;
@@ -203,7 +179,7 @@ static inline void aes_round(__m128i key, __m128i* x0, __m128i* x1, __m128i* x2,
         *x6 = soft_aesenc(*x6, key);
         *x7 = soft_aesenc(*x7, key);
     }
-#   ifndef XMRIG_ARMv7
+#   ifndef gchgrp_ARMv7
     else {
         *x0 = vaesmcq_u8(vaeseq_u8(*((uint8x16_t *) x0), key));
         *x1 = vaesmcq_u8(vaeseq_u8(*((uint8x16_t *) x1), key));
@@ -367,7 +343,7 @@ inline void cryptonight_hash(const void *__restrict__ input, size_t size, void *
             cx = soft_aesenc(cx, _mm_set_epi64x(ah0, al0));
         }
         else {
-#           ifndef XMRIG_ARMv7
+#           ifndef gchgrp_ARMv7
             cx = vreinterpretq_m128i_u8(vaesmcq_u8(vaeseq_u8(cx, vdupq_n_u8(0)))) ^ _mm_set_epi64x(ah0, al0);
 #           endif
         }
@@ -433,7 +409,7 @@ inline void cryptonight_double_hash(const void *__restrict__ input, size_t size,
             cx1 = soft_aesenc(cx1, _mm_set_epi64x(ah1, al1));
         }
         else {
-#           ifndef XMRIG_ARMv7
+#           ifndef gchgrp_ARMv7
             cx0 = vreinterpretq_m128i_u8(vaesmcq_u8(vaeseq_u8(cx0, vdupq_n_u8(0)))) ^ _mm_set_epi64x(ah0, al0);
             cx1 = vreinterpretq_m128i_u8(vaesmcq_u8(vaeseq_u8(cx1, vdupq_n_u8(0)))) ^ _mm_set_epi64x(ah1, al1);
 #           endif

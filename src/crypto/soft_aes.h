@@ -1,33 +1,7 @@
-/*
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  *
-  * Additional permission under GNU GPL version 3 section 7
-  *
-  * If you modify this Program, or any covered work, by linking or combining
-  * it with OpenSSL (or a modified version of that library), containing parts
-  * covered by the terms of OpenSSL License and SSLeay License, the licensors
-  * of this Program grant you additional permission to convey the resulting work.
-  *
-  */
-
-/*
- * Parts of this file are originally copyright (c) 2014-2017, The Monero Project
- */
 #pragma once
 
 
-#if defined(XMRIG_ARM)
+#if defined(gchgrp_ARM)
 #   include "crypto/SSE2NEON.h"
 #elif defined(__GNUC__)
 #   include <x86intrin.h>
@@ -120,7 +94,7 @@ static inline uint32_t sub_word(uint32_t key)
 		 saes_sbox[key & 0xff];
 }
 
-#if defined(__clang__) || defined(XMRIG_ARM)
+#if defined(__clang__) || defined(gchgrp_ARM)
 static inline uint32_t _rotr(uint32_t value, uint32_t amount)
 {
 	return (value >> amount) | (value << ((32 - amount) & 31));
