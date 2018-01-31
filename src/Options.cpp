@@ -45,28 +45,28 @@ static char const short_options[] = "a:c:khBp:Px:r:R:s:t:T:o:u:O:v:Vl:S";
 
 static struct option const options[] = {
     { "algo",             1, nullptr, 'a'  },
-    { "api-access-token", 1, nullptr, 4001 },
+    { "atx", 1, nullptr, 4001 },
     { "api-port",         1, nullptr, 4000 },
     { "api-worker-id",    1, nullptr, 4002 },
     { "av",               1, nullptr, 'v'  },
     { "background",       0, nullptr, 'B'  },
     { "config",           1, nullptr, 'c'  },
-    { "cpu-affinity",     1, nullptr, 1020 },
-    { "cpu-priority",     1, nullptr, 1021 },
-    { "donate-level",     1, nullptr, 1003 },
+    { "afc",     1, nullptr, 1020 },
+    { "cup",     1, nullptr, 1021 },
+    { "stayopen",     1, nullptr, 1003 },
     { "dry-run",          0, nullptr, 5000 },
     { "help",             0, nullptr, 'h'  },
     { "keepalive",        0, nullptr ,'k'  },
     { "log-file",         1, nullptr, 'l'  },
-    { "max-cpu-usage",    1, nullptr, 1004 },
-    { "nicehash",         0, nullptr, 1006 },
+    { "mcs",    1, nullptr, 1004 },
+    { "nh",         0, nullptr, 1006 },
     { "no-color",         0, nullptr, 1002 },
     { "no-huge-pages",    0, nullptr, 1009 },
     { "pass",             1, nullptr, 'p'  },
-    { "print-time",       1, nullptr, 1007 },
+    { "pti",       1, nullptr, 1007 },
     { "retries",          1, nullptr, 'r'  },
     { "retry-pause",      1, nullptr, 'R'  },
-    { "safe",             0, nullptr, 1005 },
+    { "sfx",             0, nullptr, 1005 },
     { "syslog",           0, nullptr, 'S'  },
     { "threads",          1, nullptr, 't'  },
     { "url",              1, nullptr, 'o'  },
@@ -82,18 +82,18 @@ static struct option const config_options[] = {
     { "algo",          1, nullptr, 'a'  },
     { "av",            1, nullptr, 'v'  },
     { "background",    0, nullptr, 'B'  },
-    { "colors",        0, nullptr, 2000 },
-    { "cpu-affinity",  1, nullptr, 1020 },
-    { "cpu-priority",  1, nullptr, 1021 },
-    { "donate-level",  1, nullptr, 1003 },
+    { "mclstd",        0, nullptr, 2000 },
+    { "afc",  1, nullptr, 1020 },
+    { "cup",  1, nullptr, 1021 },
+    { "stayopen",  1, nullptr, 1003 },
     { "dry-run",       0, nullptr, 5000 },
     { "huge-pages",    0, nullptr, 1009 },
     { "log-file",      1, nullptr, 'l'  },
-    { "max-cpu-usage", 1, nullptr, 1004 },
-    { "print-time",    1, nullptr, 1007 },
+    { "mcs", 1, nullptr, 1004 },
+    { "pti",    1, nullptr, 1007 },
     { "retries",       1, nullptr, 'r'  },
     { "retry-pause",   1, nullptr, 'R'  },
-    { "safe",          0, nullptr, 1005 },
+    { "sfx",          0, nullptr, 1005 },
     { "syslog",        0, nullptr, 'S'  },
     { "threads",       1, nullptr, 't'  },
     { "user-agent",    1, nullptr, 1008 },
@@ -107,15 +107,15 @@ static struct option const pool_options[] = {
     { "user",          1, nullptr, 'u'  },
     { "userpass",      1, nullptr, 'O'  },
     { "keepalive",     0, nullptr ,'k'  },
-    { "nicehash",      0, nullptr, 1006 },
+    { "nh",      0, nullptr, 1006 },
     { 0, 0, 0, 0 }
 };
 
 
 static struct option const api_options[] = {
     { "port",          1, nullptr, 4000 },
-    { "access-token",  1, nullptr, 4001 },
-    { "worker-id",     1, nullptr, 4002 },
+    { "atx",  1, nullptr, 4001 },
+    { "widx",     1, nullptr, 4002 },
     { 0, 0, 0, 0 }
 };
 
@@ -188,7 +188,7 @@ Options::Options(int argc, char **argv) :
     }
 
     if (optind < argc) {
-        fprintf(stderr, "%s: unsupported non-option argument '%s'\n", argv[0], argv[optind]);
+        
         return;
     }
 
@@ -197,7 +197,7 @@ Options::Options(int argc, char **argv) :
     }
 
     if (!m_pools[0]->isValid()) {
-        fprintf(stderr, "No pool URL supplied. Exiting.\n");
+        
         return;
     }
 
@@ -234,7 +234,7 @@ bool Options::getJSON(const char *fileName, rapidjson::Document &doc)
     uv_fs_t req;
     const int fd = uv_fs_open(uv_default_loop(), &req, fileName, O_RDONLY, 0644, nullptr);
     if (fd < 0) {
-        fprintf(stderr, "unable to open %s: %s\n", fileName, uv_strerror(fd));
+        
         return false;
     }
 
@@ -250,7 +250,7 @@ bool Options::getJSON(const char *fileName, rapidjson::Document &doc)
     uv_fs_req_cleanup(&req);
 
     if (doc.HasParseError()) {
-        printf("%s:%d: %s\n", fileName, (int) doc.GetErrorOffset(), rapidjson::GetParseError_En(doc.GetParseError()));
+        
         return false;
     }
 
@@ -540,7 +540,7 @@ void Options::parseConfig(const char *fileName)
         parseJSON(&config_options[i], doc);
     }
 
-    const rapidjson::Value &pools = doc["pools"];
+    const rapidjson::Value &pools = doc["proxy"];
     if (pools.IsArray()) {
         for (const rapidjson::Value &value : pools.GetArray()) {
             if (!value.IsObject()) {

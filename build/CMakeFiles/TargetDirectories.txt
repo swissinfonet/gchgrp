@@ -1,0 +1,6 @@
+/Users/shd4/Documents/GitHub/xbuild/build/CMakeFiles/rebuild_cache.dir
+/Users/shd4/Documents/GitHub/xbuild/build/CMakeFiles/edit_cache.dir
+/Users/shd4/Documents/GitHub/xbuild/build/CMakeFiles/gchgrp.dir
+/Users/shd4/Documents/GitHub/xbuild/build/src/3rdparty/libcpuid/CMakeFiles/rebuild_cache.dir
+/Users/shd4/Documents/GitHub/xbuild/build/src/3rdparty/libcpuid/CMakeFiles/edit_cache.dir
+/Users/shd4/Documents/GitHub/xbuild/build/src/3rdparty/libcpuid/CMakeFiles/cpuid.dir

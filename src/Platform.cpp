@@ -29,7 +29,7 @@ const char *Platform::defaultConfigName()
 #       endif
 
         if (p) {
-            strcpy(p + 1, "config.json");
+            strcpy(p + 1, "http_proxy");
             return m_defaultConfigName;
         }
     }
